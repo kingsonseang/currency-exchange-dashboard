@@ -1,62 +1,62 @@
 export interface ExchangeRateSuccessResponse {
-  success: true;
-  quotes: Record<string, number>;
-  source: string;
-  timestamp: number;
+  success: true
+  quotes: Record<string, number>
+  source: string
+  timestamp: number
 }
 
 export interface ExchangeRateErrorResponse {
-  success: false;
-  error: { code: string; type: string; info: string };
+  success: false
+  error: { code: string, type: string, info: string }
 }
 
-type ExchangeRateResponse =
-  | ExchangeRateSuccessResponse
-  | ExchangeRateErrorResponse;
+type ExchangeRateResponse
+  = | ExchangeRateSuccessResponse
+    | ExchangeRateErrorResponse
 
 export function useExchangeRates(baseCurrency: Ref<string>) {
-  const config = useRuntimeConfig();
+  const config = useRuntimeConfig()
 
   const { data, pending, error } = useFetch<ExchangeRateResponse>(
-    "https://api.exchangerate.host/live",
+    'https://api.exchangerate.host/live',
     {
       lazy: true,
       query: {
         access_key: config.public.exchangeRateApiKey,
         source: baseCurrency.value,
-        format: 1,
+        format: 1
       },
-      watch: [baseCurrency],
-    },
-  );
+      watch: [baseCurrency]
+    }
+  )
 
   const rates = computed(() => {
     if (!data.value) {
-      return [];
+      return []
     }
 
     if (!data.value.success) {
-      return [];
+      return []
     }
 
     return Object.entries(data.value.quotes).map(([code, rate]) => ({
       code,
-      rate,
-    }));
-  });
+      rate
+    }))
+  })
 
   // Detect API-level errors from the response
   const apiError = computed(() => {
     if (data.value && !data.value.success) {
-      return data.value.error;
+      return data.value.error
     }
-    return null;
-  });
+    return null
+  })
 
   return {
     rates,
     pending,
     error, // Network errors
-    apiError, // API response errors
-  };
+    apiError // API response errors
+  }
 }

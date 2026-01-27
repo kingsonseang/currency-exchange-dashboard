@@ -18,7 +18,7 @@ useSeoMeta({
   title,
   description,
   ogTitle: title,
-  ogDescription: description,
+  ogDescription: description
 })
 </script>
 
@@ -36,8 +36,14 @@ useSeoMeta({
       </template>
 
       <template #right>
-        <UButton to="https://github.com/kingsonseang/currency-exchange-dashboard" target="_blank"
-          icon="i-simple-icons-github" aria-label="GitHub" color="neutral" variant="ghost" />
+        <UButton
+          to="https://github.com/kingsonseang/currency-exchange-dashboard"
+          target="_blank"
+          icon="i-simple-icons-github"
+          aria-label="GitHub"
+          color="neutral"
+          variant="ghost"
+        />
       </template>
     </UFooter>
   </UApp>
