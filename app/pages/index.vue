@@ -67,18 +67,20 @@ const columns: TableColumn<{ code: string, rate: number }>[] = [
 </script>
 
 <template>
-  <div class="flex flex-col justify-center gap-4 mx-auto p-6">
+  <div class="flex flex-col justify-center gap-4 mx-auto p-4 sm:p-6">
     <UCard :ui="{
-      root: 'md:min-w-96 lg:w-fit',
-      header: 'flex gap-3',
+      root: 'w-full max-w-full min-w-92 sm:max-w-xl md:min-w-96 lg:w-fit',
+      header: 'flex flex-col sm:flex-row gap-3',
     }">
       <template #header>
-        <USelectMenu v-model="baseCurrency" :items="currencies" :ui="{
-          base: 'min-w-24',
-        }" />
+        <div class="flex gap-3 max-sm:w-full">
+          <USelectMenu v-model="baseCurrency" :items="currencies" :ui="{
+            base: 'w-full sm:w-auto sm:min-w-24',
+          }" />
+          <UColorModeButton class="shrink-0" />
+        </div>
         <UInput v-model="search" placeholder="Search currencies..." icon="i-lucide-search"
-          :ui="{ root: 'flex-1', base: 'flex-1' }" />
-        <UColorModeButton />
+          :ui="{ root: 'w-full', base: 'w-full' }" />
       </template>
 
       <!-- Error State -->
@@ -107,13 +109,13 @@ const columns: TableColumn<{ code: string, rate: number }>[] = [
       </UTable>
 
       <template #footer>
-        <div class="flex items-center justify-between gap-6">
-          <div class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6">
+          <div class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap order-2 sm:order-1">
             {{ filteredRates.length }} result{{ filteredRates.length !== 1 ? 's' : '' }}
           </div>
           <UPagination v-if="filteredRates.length > pageSize" v-model="page" :total="filteredRates.length"
-            :page-count="pageSize" :ui="{ list: 'justify-center' }" show-edges :sibling-count="1"
-            @update:page="page = $event" />
+            :page-count="pageSize" :ui="{ list: 'justify-center' }" :show-edges="false" :sibling-count="1"
+            class="order-1 sm:order-2" @update:page="page = $event" />
         </div>
       </template>
     </UCard>
