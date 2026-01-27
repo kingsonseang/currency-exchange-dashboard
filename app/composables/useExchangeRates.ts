@@ -26,21 +26,37 @@ export function useExchangeRates(baseCurrency: Ref<string>) {
         source: baseCurrency.value,
         format: 1,
       },
+      watch: [baseCurrency],
     },
   );
 
   const rates = computed(() => {
-    if (!data.value) return [];
-    if (!data.value.success) return []; // handle error here
+    if (!data.value) {
+      return [];
+    }
+
+    if (!data.value.success) {
+      return [];
+    }
+
     return Object.entries(data.value.quotes).map(([code, rate]) => ({
       code,
       rate,
     }));
   });
 
+  // Detect API-level errors from the response
+  const apiError = computed(() => {
+    if (data.value && !data.value.success) {
+      return data.value.error;
+    }
+    return null;
+  });
+
   return {
     rates,
     pending,
-    error,
+    error, // Network errors
+    apiError, // API response errors
   };
 }
